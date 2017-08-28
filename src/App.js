@@ -9,16 +9,16 @@ class App extends Component {
                 <h1>James Chou</h1>
                 <p>
                     Hi, I am <strong><a href="" id="facebook-link" target="_blank">James Chou</a></strong>. I'm a <strong><a href="http://www.github.com/jamesmtchou" target="_blank"
-                                                       id="github-link">Software Engineer</a></strong>, and a <strong><a href="https://www.kaggle.com/jamesmtchou" target="_blank" id="kaggle-link">Machine Learning Technologist</a></strong> living in San
+                                                       id="github-link">Software Engineer</a></strong>, and a <strong><a href="https://www.kaggle.com/jamesmtchou" target="_blank" id="kaggle-link">Machine Learning Scientist</a></strong> living in San
                     Francisco, CA.
                 </p>
                 <p>
-                    I currently work at <strong><a href="http://www.autodesk.com" target="_blank" className="autodesk-link">Autodesk</a></strong> as a
+                    I currently work at <strong><a href="http://www.autodesk.com" target="_blank" id="autodesk-link">Autodesk</a></strong> as a
                     Front-End Developer. I've worked at <strong><a href="https://www.microsoft.com/" target="_blank"
                                                                  id="microsoft-link">Microsoft</a></strong> on an internal IAM system.
                 </p>
                 <p>
-                    I primarily do JavaScript, CSS, HTML and Java here and there. I also produced <strong><a
+                    I primarily do JavaScript, CSS, HTML, Python and Java here and there. I also produced <strong><a
                     href="https://www.youtube.com/watch?v=ejJ8AiGy2aI" target="_blank"
                     id="video-link">shows</a></strong> for the Taiwanese American community.
                 </p>

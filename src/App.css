@@ -118,11 +118,6 @@ h1 {
     color: #000;
 }
 
-.icon-flickr,
-.flickr-link span {
-    color: #FC329B;
-}
-
 .icon-kaggle:hover,
 .kaggle-link:hover span {
     color: #20BEFF;
@@ -148,45 +143,36 @@ h1 {
     color: #2C618D;
 }
 
+.icon-kaggle:before {
+    content: "";
+    background: transparent url(./img/kaggle_400x400.png) no-repeat;
+    height: 24px;
+    width: 21.44px;
+    background-size: auto 25px;
+    margin-bottom: -1px;
+    border-radius: 5px;
+}
+
 #video-link:hover {
     color: #e52d27;
 }
 
-#yahoo-link:hover,
-#searchsdkios-link:hover {
-    color: #400090;
+#kaggle-link:hover {
+    color: #20BEFF;
 }
 
-a.google:hover span.red {
-    color: #d50f25;
-    text-decoration: none;
+#autodesk-link:hover {
+    color: #0696D7;
 }
 
-a.google:hover span.blue {
-    color: #3369E8;
-    text-decoration: none;
-}
-
-a.google:hover span.yellow {
-    color: #eeb211;
-    text-decoration: none;
-}
-
-a.google:hover span.green {
-    color: #009925;
-    text-decoration: none;
-}
-
-#bruinmenu-link:hover,
-#citysurf-link:hover {
-    color: #00ACEE;
+#microsoft-link:hover {
+    color: #0071DA;
 }
 
 #video-link:active,
-#yahoo-link:active,
-#searchsdkios-link:active,
-#bruinmenu-link:active,
-#citysurf-link:active {
+#autodesk-link:active,
+#microsoft-link:active,
+#kaggle-link:active {
     color: #CA411E;
 }
 
@@ -300,11 +286,11 @@ li {
         color: #fff;
     }
 
-    .flickr-link,
-    .flickr-link i,
-    .flickr-link span,
-    .flickr-link:hover span {
-        background-color: #FC329B;
+    .kaggle-link,
+    .kaggle-link i,
+    .kaggle-link span,
+    .kaggle-link:hover span {
+        background-color: #20BEFF;
         color: #fff;
     }
 
