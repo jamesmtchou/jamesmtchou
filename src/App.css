@@ -1,24 +1,318 @@
-.App {
-  text-align: center;
+html {
+    text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+body {
+    width: 470px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-rendering: optimizeLegibility;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+p,
+li {
+    color: #666;
+    font-family: 'Lucida Grande', Helvetica;
+    font-size: 25px;
+    text-align: left;
 }
 
-.App-intro {
-  font-size: large;
+p a,
+p strong,
+li a {
+    text-decoration: none;
+    color: #333;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+li span {
+    display: none;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+p a:hover {
+    color: #F38199;
+}
+
+li {
+    -webkit-transition: -webkit-transform .15s cubic-bezier(.11, .65, 1, 1.69);
+    -moz-transition: -moz-transform .15s cubic-bezier(.11, .65, 1, 1.69);
+    transition: transform .15s cubic-bezier(.11, .65, 1, 1.69);
+}
+
+li:hover {
+    -webkit-transform: scale(1.3);
+    -moz-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+h1 {
+    overflow: hidden;
+    font-size: 0;
+    background: transparent url(./img/jamesChou.jpg) no-repeat 55% 40%;
+    background-size: 200px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 auto 10px auto;
+    border: 6px solid #eee;
+}
+
+.icon-twitter,
+#twitter-link:hover,
+.twitter-link span {
+    color: #00ACEE;
+}
+
+.icon-twitter:hover,
+#twitter-link:active,
+.twitter-link:hover span {
+    color: #009CDE;
+}
+
+.icon-facebook,
+.icon-facebook-sign,
+#facebook-link:hover,
+.facebook-link span {
+    color: #4862A3;
+}
+
+.icon-facebook:hover,
+.icon-facebook-sign:hover,
+#facebook-link:active,
+.facebook-link:hover span {
+    color: #385293;
+}
+
+.icon-linkedin,
+.icon-linkedin-sign,
+#linkedin-link:hover,
+.linkedin-link span {
+    color: #1884BC;
+}
+
+.icon-linkedin:hover,
+.icon-linkedin-sign:hover,
+#linkedin-link:active,
+.linkedin-link:hover span {
+    color: #0874AC;
+}
+
+.icon-github,
+.github-link span {
+    color: #333;
+}
+
+#github-link:hover,
+.github-link:hover span {
+    color: #666;
+}
+
+.icon-github:hover,
+#github-link:active {
+    color: #000;
+}
+
+.icon-flickr,
+.flickr-link span {
+    color: #FC329B;
+}
+
+.icon-kaggle:hover,
+.kaggle-link:hover span {
+    color: #20BEFF;
+}
+
+.icon-file-text,
+.resume-link span {
+    color: #228B22;
+}
+
+.icon-file-text:hover,
+.resume-link:hover span {
+    color: #228B22;
+}
+
+.icon-instagram,
+.instagram-link span {
+    color: #3C719D;
+}
+
+.icon-instagram:hover,
+.instagram-link:hover span {
+    color: #2C618D;
+}
+
+#video-link:hover {
+    color: #e52d27;
+}
+
+#yahoo-link:hover,
+#searchsdkios-link:hover {
+    color: #400090;
+}
+
+a.google:hover span.red {
+    color: #d50f25;
+    text-decoration: none;
+}
+
+a.google:hover span.blue {
+    color: #3369E8;
+    text-decoration: none;
+}
+
+a.google:hover span.yellow {
+    color: #eeb211;
+    text-decoration: none;
+}
+
+a.google:hover span.green {
+    color: #009925;
+    text-decoration: none;
+}
+
+#bruinmenu-link:hover,
+#citysurf-link:hover {
+    color: #00ACEE;
+}
+
+#video-link:active,
+#yahoo-link:active,
+#searchsdkios-link:active,
+#bruinmenu-link:active,
+#citysurf-link:active {
+    color: #CA411E;
+}
+
+i {
+
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    text-align: center;
+    width: 62px;
+    display: inline-block;
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 767px) {
+    body {
+        width: auto;
+        position: relative;
+        -webkit-transform: none;
+        -moz-transform: none;
+        transform: none;
+        margin: 0;
+        left: 0;
+        top: 0;
+    }
+
+    h1 {
+        margin: 20px auto 0 auto;
+    }
+
+    p {
+        font-size: 24px;
+        margin: 20px;
+    }
+
+    ul {
+        margin-top: 40px;
+    }
+
+    li {
+        display: block;
+        width: 100%;
+    }
+
+    li a {
+        display: block;
+        border-top: 1px solid #fff;
+        width: 100%;
+        vertical-align: middle;
+        text-align: left;
+        line-height: 40px;
+    }
+
+    li:hover {
+        -webkit-transform: none;
+        -moz-transform: none;
+        transform: none;
+    }
+
+    li span {
+        display: inline;
+    }
+
+    li a:hover span,
+    li a:visited span {
+        color: #fff;
+    }
+
+    i {
+        margin-left: 20px;
+    }
+
+    .twitter-link,
+    .twitter-link i,
+    .twitter-link span,
+    .twitter-link:hover span {
+        background-color: #00ACEE;
+        color: #fff;
+    }
+
+    .facebook-link,
+    .facebook-link i,
+    .facebook-link span,
+    .facebook-link:hover span {
+        background-color: #4862A3;
+        color: #fff;
+    }
+
+    .github-link,
+    .github-link i,
+    .github-link span,
+    .github-link:hover span {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .linkedin-link,
+    .linkedin-link i,
+    .linkedin-link span,
+    .linkedin-link:hover span {
+        background-color: #1884BC;
+        color: #fff;
+    }
+
+    .flickr-link,
+    .flickr-link i,
+    .flickr-link span,
+    .flickr-link:hover span {
+        background-color: #FC329B;
+        color: #fff;
+    }
+
+    .resume-link,
+    .resume-link i,
+    .resume-link span,
+    .resume-link:hover span {
+        background-color: #228B22;
+        color: #fff;
+    }
 }
