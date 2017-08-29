@@ -125,12 +125,12 @@ h1 {
 
 .icon-file-text,
 .resume-link span {
-    color: #228B22;
+    color: gold;
 }
 
 .icon-file-text:hover,
 .resume-link:hover span {
-    color: #228B22;
+    color: gold;
 }
 
 .icon-instagram,
@@ -159,6 +159,10 @@ h1 {
 
 #kaggle-link:hover {
     color: #20BEFF;
+}
+
+#accenture-link:hover {
+    color: #29B662;
 }
 
 #autodesk-link:hover {
@@ -298,7 +302,7 @@ li {
     .resume-link i,
     .resume-link span,
     .resume-link:hover span {
-        background-color: #228B22;
+        background-color: gold;
         color: #fff;
     }
 }

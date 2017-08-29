@@ -13,12 +13,11 @@ class App extends Component {
                     Francisco, CA.
                 </p>
                 <p>
-                    I currently work at <strong><a href="http://www.autodesk.com" target="_blank" id="autodesk-link">Autodesk</a></strong> as a
-                    Front-End Developer. I've worked at <strong><a href="https://www.microsoft.com/" target="_blank"
-                                                                 id="microsoft-link">Microsoft</a></strong> on an internal IAM system.
+                    I am working at <strong><a href="http://www.accenture.com" target="_blank" id="accenture-link">Accenture</a></strong> as a Technology Consultant. My current client is <strong><a href="https://www.autodesk.com" target="_blank" id="autodesk-link">Autodesk</a></strong>. I've also worked at <strong><a href="https://www.microsoft.com/" target="_blank"
+                                                                 id="microsoft-link">Microsoft</a></strong> on internal IAM systems.
                 </p>
                 <p>
-                    I primarily do JavaScript, CSS, HTML, Python and Java here and there. I also produced <strong><a
+                    I primarily do JavaScript, CSS, HTML, Python, and Java here and there. I also produced <strong><a
                     href="https://www.youtube.com/watch?v=ejJ8AiGy2aI" target="_blank"
                     id="video-link">shows</a></strong> for the Taiwanese American community.
                 </p>
