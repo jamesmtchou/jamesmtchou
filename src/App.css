@@ -125,24 +125,27 @@ h1 {
 
 .icon-file-text,
 .resume-link span {
-    color: gold;
+    color: #FFD700;
 }
 
 .icon-file-text:hover,
 .resume-link:hover span {
-    color: gold;
+    color: #ffcb05;
 }
 
 .icon-instagram,
 .instagram-link span {
-    color: #3C719D;
+    color: #D6249F;
 }
 
 .icon-instagram:hover,
 .instagram-link:hover span {
-    color: #2C618D;
+    color: #c92ad6;
 }
 
+.icon-kaggle {
+    opacity: 0.9;
+}
 .icon-kaggle:before {
     content: "";
     background: transparent url(./img/kaggle_400x400.png) no-repeat;
@@ -151,6 +154,10 @@ h1 {
     background-size: auto 25px;
     margin-bottom: -1px;
     border-radius: 5px;
+}
+
+.icon-kaggle:hover {
+    opacity: 1;
 }
 
 #video-link:hover {
@@ -173,10 +180,16 @@ h1 {
     color: #0071DA;
 }
 
+#instagram-link:hover {
+    color: #D6249F;
+}
+
 #video-link:active,
+#accenture-link:active,
 #autodesk-link:active,
 #microsoft-link:active,
-#kaggle-link:active {
+#kaggle-link:active,
+#instagram-link:active {
     color: #CA411E;
 }
 
@@ -298,11 +311,19 @@ li {
         color: #fff;
     }
 
+    .instagram-link,
+    .instagram-link i,
+    .instagram-link span,
+    .instagram-link:hover span {
+        background-color: #D6249F;
+        color: #fff;
+    }
+
     .resume-link,
     .resume-link i,
     .resume-link span,
     .resume-link:hover span {
-        background-color: gold;
+        background-color: #FFD700;
         color: #fff;
     }
 }

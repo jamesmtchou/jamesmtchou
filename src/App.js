@@ -8,7 +8,7 @@ class App extends Component {
             <div className="App">
                 <h1>James Chou</h1>
                 <p>
-                    Hi, I am <strong><a href="" id="facebook-link" target="_blank">James Chou</a></strong>. I'm a <strong><a href="http://www.github.com/jamesmtchou" target="_blank"
+                    Hi, I am <strong><a href="https://www.facebook.com/james.chou.9406417" id="facebook-link" target="_blank">James Chou</a></strong>. I'm a <strong><a href="http://www.github.com/jamesmtchou" target="_blank"
                                                        id="github-link">Software Engineer</a></strong>, and a <strong><a href="https://www.kaggle.com/jamesmtchou" target="_blank" id="kaggle-link">Machine Learning Scientist</a></strong> living in San
                     Francisco, CA.
                 </p>
@@ -19,7 +19,7 @@ class App extends Component {
                 <p>
                     I primarily do JavaScript, CSS, HTML, Python, and Java here and there. I also produced <strong><a
                     href="https://www.youtube.com/watch?v=ejJ8AiGy2aI" target="_blank"
-                    id="video-link">shows</a></strong> for the Taiwanese American community.
+                    id="video-link">shows</a></strong> for the Taiwanese American community. Finally, I have an adorable poodle who sometimes posts his cute <strong><a href="http://instagram.com/poo_poo_littlered" target="_blank" id="instagram-link">selfies</a></strong>.
                 </p>
                 <ul id="networks">
                     <li className="resume-link">
@@ -28,14 +28,14 @@ class App extends Component {
                             <span>Resume</span>
                         </a>
                     </li>
-                    <li className="twitter-link">
-                        <a href="https://twitter.com/st40611" target="_blank">
-                            <i className="icon-twitter"></i>
-                            <span>Twitter</span>
+                    <li className="instagram-link">
+                        <a href="http://instagram.com/poo_poo_littlered" target="_blank">
+                            <i className="icon-instagram"></i>
+                            <span>Instagram</span>
                         </a>
                     </li>
                     <li className="facebook-link">
-                        <a href="" target="_blank">
+                        <a href="https://www.facebook.com/james.chou.9406417" target="_blank">
                             <i className="icon-facebook-sign"></i>
                             <span>Facebook</span>
                         </a>
