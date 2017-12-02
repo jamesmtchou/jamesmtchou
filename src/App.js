@@ -9,7 +9,7 @@ class App extends Component {
                 <h1>James Chou</h1>
                 <p>
                     Hi, I am <strong><a href="https://www.facebook.com/james.chou.9406417" id="facebook-link" target="_blank">James Chou</a></strong>. I'm a <strong><a href="http://www.github.com/jamesmtchou" target="_blank"
-                                                       id="github-link">Software Engineer</a></strong>, and a <strong><a href="https://www.kaggle.com/jamesmtchou" target="_blank" id="kaggle-link">Machine Learning Scientist</a></strong> living in San
+                                                       id="github-link">Full Stack Software Engineer</a></strong>, and a <strong><a href="https://www.kaggle.com/jamesmtchou" target="_blank" id="kaggle-link">Data Scientist</a></strong> living in San
                     Francisco, CA.
                 </p>
                 <p>
