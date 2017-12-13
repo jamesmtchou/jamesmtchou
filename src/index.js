@@ -1,17 +1,33 @@
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import NnArt from './Nn-art/Nn-art'
+import NnArtButton from './Nn-art/Nn-art-button';
 import './index.css';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-const Shell = () => (
-    <MuiThemeProvider>
-        <div id="index">
-            <NnArt/>
-            <App/>
-        </div>
-    </MuiThemeProvider>
-);
+class Shell extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {nnArtEnabled: false};
+        this.toggleNnArt = this.toggleNnArt.bind(this);
+    }
+    toggleNnArt() {
+        this.setState({nnArtEnabled: !this.state.nnArtEnabled});
+    }
+    render() {
+        const {nnArtEnabled} = this.state;
+        return (
+            <MuiThemeProvider>
+                <div id="index">
+                    <NnArt nnArtEnabled={nnArtEnabled}/>
+                    <App/>
+                    <NnArtButton nnArtEnabled={nnArtEnabled} onClick={this.toggleNnArt} />
+                </div>
+            </MuiThemeProvider>
+        );
+    }
+}
 
 ReactDOM.render(
     <Shell />,

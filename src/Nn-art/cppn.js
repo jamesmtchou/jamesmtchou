@@ -13,11 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * =============================================================================
+ * @license
+ * Copyright 2017 Meng-Ta Chou. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -----------------------------------------------------------------------------
+ * Modified to use pure ES6 from TypeScript.
+ * =============================================================================
  */
 
 import {Array2D, gpgpu_util, GPGPUContext, NDArrayMathGPU, webgl_util} from 'deeplearn';
 
-import * as nn_art_util from './nn-art-util';
+import * as nnArtUtil from './nn-art-util';
 
 const MAX_LAYERS = 10;
 
@@ -77,10 +93,10 @@ export class CPPN {
     this.inferenceCanvas.width = canvasSize;
     this.inferenceCanvas.height = canvasSize;
 
-    this.renderShader = nn_art_util.getRenderShader(this.gpgpu, canvasSize);
-    this.addLatentVariablesShader = nn_art_util.getAddLatentVariablesShader(
+    this.renderShader = nnArtUtil.getRenderShader(this.gpgpu, canvasSize);
+    this.addLatentVariablesShader = nnArtUtil.getAddLatentVariablesShader(
         this.gpgpu, NUM_IMAGE_SPACE_VARIABLES);
-    this.inputAtlas = nn_art_util.createInputAtlas(
+    this.inputAtlas = nnArtUtil.createInputAtlas(
         canvasSize, NUM_IMAGE_SPACE_VARIABLES, NUM_LATENT_VARIABLES);
   }
 
@@ -146,7 +162,7 @@ export class CPPN {
     // Add the latent variables.
     const addLatentVariablesResultTex =
         this.math.getTextureManager().acquireTexture(this.inputAtlas.shape);
-    nn_art_util.addLatentVariables(
+    nnArtUtil.addLatentVariables(
         this.gpgpu, this.addLatentVariablesShader, this.inputAtlas.getTexture(),
         addLatentVariablesResultTex, this.inputAtlas.shape, z1, z2);
     const inputAtlasWithLatentVariables = Array2D.make(this.inputAtlas.shape, {
@@ -166,7 +182,7 @@ export class CPPN {
             activationFunctionMap[this.selectedActivationFunctionName](
                 this.math, matmulResult);
       }
-      nn_art_util.render(
+      nnArtUtil.render(
           this.gpgpu, this.renderShader, lastOutput.getTexture(),
           outputDimensions, colorModeIndex);
     });

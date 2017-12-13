@@ -33,9 +33,8 @@
  */
 
 import React, {Component} from 'react';
-import {ActivationFunction, ColorMode, CPPN} from './cppn';
+import {CPPN} from './cppn';
 
-const CANVAS_UPSCALE_FACTOR = 3;
 const MAT_WIDTH = 30;
 // Standard deviations for gaussian weight initialization.
 const WEIGHTS_STDEV = .6;
@@ -48,18 +47,22 @@ export default class NnArt extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedColorModeName: 'yuv',
-            selectedActivationFunctionName: 'relu',
-            numLayers: 1,
-            z1Scale: 1,
-            z2Scale: 1
+            selectedColorModeName: 'rgb',
+            selectedActivationFunctionName: 'tanh',
+            numLayers: 2,
+            z1Scale: 0,
+            z2Scale: 0
         };
         this.ready = this.ready.bind(this);
+        this.start = this.start.bind(this);
+        this.stop = this.stop.bind(this);
     }
     componentDidMount() {
         this.ready();
     }
-    
+    componentWillUnmount() {
+        this.stop();
+    }
     ready() {
         const {selectedColorModeName, selectedActivationFunctionName, numLayers, z1Scale, z2Scale} = this.state;
         this.cppn = new CPPN(this.inferenceCanvas);
@@ -75,13 +78,20 @@ export default class NnArt extends Component {
         this.cppn.setZ2Scale(this.convertZScale(z2Scale));
 
         this.cppn.generateWeights(MAT_WIDTH, WEIGHTS_STDEV);
-        this.cppn.start();
+    }
+    start() {
+        this.stop();
+        this.cppn && this.cppn.start();        
+    }
+    stop() {
+        this.cppn && this.cppn.stopInferenceLoop();
     }
     convertZScale(z) {
         return (103 - z);
     }
-
     render() {
-        return <canvas id="inference" ref={(el) => { this.inferenceCanvas = el; }}></canvas>;
+        const {nnArtEnabled} = this.props;
+        nnArtEnabled ? this.start() : this.stop();
+        return <canvas id="inference" className={nnArtEnabled ? 'enabled' : ''} ref={(el) => { this.inferenceCanvas = el; }}></canvas>;
     }
 }
