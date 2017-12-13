@@ -41,7 +41,7 @@ body {
 }
 
 .nn-buttons-container {
-    opacity: 0.4;
+    opacity: 0.75;
     animation: hue-animation 8s infinite;
 }
 
@@ -69,13 +69,25 @@ body {
 
 @keyframes hue-animation {
     0% {
-        filter: hue-rotate(0deg);
+        filter: hue-rotate(0deg) brightness(110.08%);
+    }
+    14% {
+        filter: hue-rotate(50.4deg) brightness(100%);
     }
     50% {
-        filter: hue-rotate(180deg);
+        filter: hue-rotate(180deg) brightness(125.92%);
+    }
+    60% {
+        filter: hue-rotate(216deg) brightness(133.12%)
+    }
+    64% {
+        filter: hue-rotate(230.4deg) brightness(136%);
+    }
+    68% {
+        filter: hue-rotate(244.8deg) brightness(138.88%);
     }
     100% {
-        filter: hue-rotate(360deg);
+        filter: hue-rotate(360deg) brightness(110.08%);
     }
 }
 
