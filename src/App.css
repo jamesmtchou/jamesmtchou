@@ -400,6 +400,10 @@ li {
         color: #fff;
     }
 
+    .icon-kaggle:before {
+        background-color: #fff;
+    }
+
     .instagram-link,
     .instagram-link i,
     .instagram-link span,
