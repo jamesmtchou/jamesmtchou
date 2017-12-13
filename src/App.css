@@ -49,22 +49,19 @@ body {
     animation: none;
 }
 
-.nn-button {
+.nn-button, .cppn-link-button  {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
 }
 
 .cppn-link-button {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
     -webkit-transition: bottom 0.5s linear;
     -moz-transition: bottom 0.5s linear;
     transition: bottom 0.5s linear;    
 }
 
-.cppn-link-button.hovered {
+.cppn-link-button.linkEnabled {
     position: fixed;
     bottom: 4.8rem;
     right: 2rem;
@@ -304,8 +301,13 @@ li {
         transform: none;
     }
 
-    .nn-button {
+    .nn-button, .cppn-link-button {
         top: 2rem;
+        bottom: auto;
+    }
+
+    .cppn-link-button.linkEnabled {
+        top: 5rem;
         bottom: auto;
     }
 

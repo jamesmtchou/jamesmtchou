@@ -4,9 +4,9 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 class NnArtButton extends Component {
-    state = {hovered: false};
+    state = {linkEnabled: false};
     toggleState = (bool) => {
-        this.setState({hovered: bool});
+        this.setState({linkEnabled: bool});
     }
     render() {
         const {nnArtEnabled, onClick} = this.props;
@@ -14,8 +14,8 @@ class NnArtButton extends Component {
         const secondary = nnArtEnabled ? 'secondary' : '';
         const cppnHref = 'http://blog.otoro.net/2016/03/25/generating-abstract-patterns-with-tensorflow/';            
         return (
-            <div className={`nn-buttons-container ${secondary}`} onMouseEnter={() => this.toggleState(true)} onMouseLeave={() => this.toggleState(false)}>
-                <FloatingActionButton backgroundColor={backgroundColor} className={`cppn-link-button ${this.state.hovered ? 'hovered' : ''}`} 
+            <div className={`nn-buttons-container ${secondary}`} onClick={() => this.toggleState(false)} onMouseEnter={() => this.toggleState(true)} onMouseLeave={() => this.toggleState(false)}>
+                <FloatingActionButton backgroundColor={backgroundColor} className={`cppn-link-button ${this.state.linkEnabled ? 'linkEnabled' : ''}`} 
                     secondary={nnArtEnabled}><a href={cppnHref} target="_blank">CPPN</a></FloatingActionButton>
                 <FloatingActionButton backgroundColor={backgroundColor} className="nn-button"  onClick={onClick} 
                     secondary={nnArtEnabled}>
