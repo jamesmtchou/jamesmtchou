@@ -301,6 +301,9 @@ li {
         transform: none;
     }
 
+    .nn-buttons-container {
+        display: none;
+    }
     .nn-button, .cppn-link-button {
         top: 2rem;
         bottom: auto;
