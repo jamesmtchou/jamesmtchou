@@ -92,6 +92,6 @@ export default class NnArt extends Component {
     render() {
         const {nnArtEnabled} = this.props;
         nnArtEnabled ? this.start() : this.stop();
-        return <canvas id="inference" className={nnArtEnabled ? 'enabled' : ''} ref={(el) => { this.inferenceCanvas = el; }}></canvas>;
+        return <div className={`canvas-wrapper ${nnArtEnabled ? 'enabled' : ''}`}><canvas id="inference" ref={(el) => { this.inferenceCanvas = el; }}></canvas></div>;
     }
 }

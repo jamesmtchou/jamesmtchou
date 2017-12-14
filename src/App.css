@@ -20,6 +20,11 @@ body {
 }
 
 #inference {
+    height: 100%;
+    width: 100%;
+}
+
+.canvas-wrapper {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -29,12 +34,13 @@ body {
     -webkit-transition: transform 0.5s linear;
     -moz-transition: transform 0.5s linear;
     transition: transform 0.5s linear;    
-    min-height: 135vh;
-    min-width: 135vw;
+    min-height: 145vh;
+    min-width: 145vw;
     border-radius: 50%;
+    overflow: hidden;
 }
 
-#inference.enabled {
+.canvas-wrapper.enabled {
     -webkit-transform: translate(-50%, -50%) scale(1, 1);
     -moz-transform: translate(-50%, -50%) scale(1, 1);
     transform: translate(-50%, -50%) scale(1, 1);
