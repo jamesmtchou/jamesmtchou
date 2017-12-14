@@ -47,9 +47,9 @@ export default class NnArt extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedColorModeName: 'rgb',
-            selectedActivationFunctionName: 'tanh',
-            numLayers: 2,
+            selectedColorModeName: 'yuv',
+            selectedActivationFunctionName: 'relu',
+            numLayers: 1,
             z1Scale: 0,
             z2Scale: 0
         };
