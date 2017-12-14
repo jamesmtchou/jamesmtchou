@@ -7,16 +7,14 @@ html {
 body {
     margin: 0;
     text-rendering: optimizeLegibility;
+    height: 100%;
 }
 
 .app {
+    padding-top: 50px;
     width: 470px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    margin: auto;
+    position: relative;
 }
 
 #inference {
@@ -33,9 +31,11 @@ body {
     transform: translate(-50%, -50%) scale(0, 0);
     -webkit-transition: transform 0.5s linear;
     -moz-transition: transform 0.5s linear;
-    transition: transform 0.5s linear;    
+    transition: transform 0.5s linear;
+    height: 145vw;
+    width: 145vw;    
     min-height: 145vh;
-    min-width: 145vw;
+    min-width: 145vh;    
     border-radius: 50%;
     overflow: hidden;
 }
@@ -90,7 +90,7 @@ body {
         filter: hue-rotate(230.4deg) brightness(136%);
     }
     68% {
-        filter: hue-rotate(244.8deg) brightness(138.88%);
+        filter: hue-rotate(244.8deg) brightness(133.12%);
     }
     100% {
         filter: hue-rotate(360deg) brightness(110.08%);
@@ -310,6 +310,7 @@ li {
     }
     
     .app {
+        padding-top: 0;
         width: auto;
         position: relative;
         top: auto;
