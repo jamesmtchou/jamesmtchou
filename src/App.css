@@ -42,6 +42,7 @@ body {
     min-width: 145vh;    
     border-radius: 50%;
     overflow: hidden;
+    will-change: transform;
 }
 
 .canvas-wrapper.enabled {
@@ -56,6 +57,7 @@ body {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
+    will-change: filter;
 }
 
 .nn-buttons-container.secondary {
