@@ -28,35 +28,38 @@ body {
 
 .canvas-wrapper {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%) scale(0, 0);
-    -moz-transform: translate(-50%, -50%) scale(0, 0);
-    transform: translate(-50%, -50%) scale(0, 0);
+    bottom: 4rem;
+    right: 4rem;
+    -webkit-transform: translate(50%, 50%) scale(0, 0);
+    -moz-transform: translate(50%, 50%) scale(0, 0);
+    transform: translate(50%, 50%) scale(0, 0);
     -webkit-transition: transform 0.5s linear;
     -moz-transition: transform 0.5s linear;
     transition: transform 0.5s linear;
-    height: 145vw;
-    width: 145vw;    
-    min-height: 145vh;
-    min-width: 145vh;    
+    height: 284vw;
+    width: 284vw;    
+    min-height: 284vh;
+    min-width: 284vh;    
     border-radius: 50%;
     overflow: hidden;
     will-change: transform;
 }
 
 .canvas-wrapper.enabled {
-    -webkit-transform: translate(-50%, -50%) scale(1, 1);
-    -moz-transform: translate(-50%, -50%) scale(1, 1);
-    transform: translate(-50%, -50%) scale(1, 1);
+    -webkit-transform: translate(50%, 50%) scale(1, 1);
+    -moz-transform: translate(50%, 50%) scale(1, 1);
+    transform: translate(50%, 50%) scale(1, 1);
 }
 
 .nn-buttons-container {
     opacity: 0.75;
     animation: hue-animation 8s infinite;
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: 4rem;
+    right: 4rem;
+    -webkit-transform: translate(50%, 50%);
+    -moz-transform: translate(50%, 50%);
+    transform: translate(50%, 50%);
     will-change: filter;
 }
 
@@ -64,7 +67,7 @@ body {
     animation: none;
 }
 
-.nn-button, .cppn-link-button  {
+.cppn-link-button  {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -77,7 +80,6 @@ body {
 }
 
 .cppn-link-button.linkEnabled {
-    position: relaive;
     bottom: 2.8rem;
 }
 
@@ -328,13 +330,31 @@ li {
         transform: none;
     }
 
-    .nn-buttons-container {
-        display: none;
-        top: 2rem;
+    .canvas-wrapper {
+        top: 4rem;
         bottom: auto;
+        -webkit-transform: translate(50%, -50%) scale(0, 0);
+        -moz-transform: translate(50%, -50%) scale(0, 0);
+        transform: translate(50%, -50%) scale(0, 0);
     }
 
-    .nn-button, .cppn-link-button  {
+    .canvas-wrapper.enabled {
+        -webkit-transform: translate(50%, -50%) scale(1, 1);
+        -moz-transform: translate(50%, -50%) scale(1, 1);
+        transform: translate(50%, -50%) scale(1, 1);
+    }
+    
+
+    .nn-buttons-container {
+        display: none;
+        top: 4rem;
+        bottom: auto;
+        -webkit-transform: translate(50%, -50%);
+        -moz-transform: translate(50%, -50%);
+        transform: translate(50%, -50%);
+    }
+
+    .cppn-link-button  {
         position: absolute;
         right: 0;
         top: 0;
@@ -342,7 +362,7 @@ li {
     }
 
     .cppn-link-button.linkEnabled {
-        top: 3rem;
+        top: 2.8rem;
         bottom: auto;
     }
 

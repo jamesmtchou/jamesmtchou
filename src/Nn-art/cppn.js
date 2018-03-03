@@ -31,94 +31,72 @@
  * =============================================================================
  */
 
-import {Array2D, gpgpu_util, GPGPUContext, NDArrayMathGPU, webgl_util} from 'deeplearn';
-
+import * as dl from 'deeplearn';
 import * as nnArtUtil from './nn-art-util';
 
 const MAX_LAYERS = 10;
 
-const colorModeOutputDimensions= {
-  'rgb': 3,
-  'rgba': 4,
-  'hsv': 3,
-  'hsva': 4,
-  'yuv': 3,
-  'yuva': 4,
-  'bw': 1
-};
-
 const activationFunctionMap = {
-  'tanh': (math, ndarray) => math.tanh(ndarray),
-  'sin': (math, ndarray) => math.sin(ndarray),
-  'relu': (math, ndarray) => math.relu(ndarray),
-  'step': (math, ndarray) => math.step(ndarray)
+  'tanh': x => x.tanh(),
+  'sin': x => x.sin(),
+  'relu': x => x.relu(),
+  'step': x => x.step()
 };
 
 const NUM_IMAGE_SPACE_VARIABLES = 3;  // x, y, r
-const NUM_LATENT_VARIABLES = 2;
+const NUM_LATENT_VARIABLES = 2; // z1, z2
 
 export class CPPN {
+  inputAtlas;
+  ones;
+
+  firstLayerWeights;
+  intermediateWeights = [];
+  lastLayerWeights;
+
+  z1Counter = 0;
+  z2Counter = 0;
+  z1Scale = 1;
+  z2Scale = 1;
+  numLayers;
+
+  selectedActivationFunctionName;
+
+  isInferring = false;
   inferenceCanvas;
-  math;
-  gl;
-   gpgpu;
-   renderShader;
-   addLatentVariablesShader;
 
-   inputAtlas;
-   weights = [];
-
-   z1Counter = 0;
-   z2Counter = 0;
-   z1Scale;
-   z2Scale;
-   numLayers;
-
-   colorModeNames =
-      ['rgb', 'rgba', 'hsv', 'hsva', 'yuv', 'yuva', 'bw'];
-
-   selectedColorModeName;
-   selectedActivationFunctionName;
-
-   isInferring = false;
-
-  constructor( inferenceCanvas) {
+  constructor(inferenceCanvas) {
     this.inferenceCanvas = inferenceCanvas;
-    this.gl = gpgpu_util.createWebGLContext(this.inferenceCanvas);
-    this.gpgpu = new GPGPUContext(this.gl);
-    this.math = new NDArrayMathGPU(this.gpgpu);
-
-    const maxTextureSize = webgl_util.queryMaxTextureSize(this.gl);
-    const canvasSize = Math.floor(Math.sqrt(maxTextureSize));
+    const canvasSize = 128;
     this.inferenceCanvas.width = canvasSize;
     this.inferenceCanvas.height = canvasSize;
 
-    this.renderShader = nnArtUtil.getRenderShader(this.gpgpu, canvasSize);
-    this.addLatentVariablesShader = nnArtUtil.getAddLatentVariablesShader(
-        this.gpgpu, NUM_IMAGE_SPACE_VARIABLES);
     this.inputAtlas = nnArtUtil.createInputAtlas(
-        canvasSize, NUM_IMAGE_SPACE_VARIABLES, NUM_LATENT_VARIABLES);
+    canvasSize, NUM_IMAGE_SPACE_VARIABLES, NUM_LATENT_VARIABLES);
+    this.ones = dl.ones([this.inputAtlas.shape[0], 1]);
   }
 
   generateWeights(neuronsPerLayer, weightsStdev) {
-    for (let i = 0; i < this.weights.length; i++) {
-      this.weights[i].dispose();
+    for (let i = 0; i < this.intermediateWeights.length; i++) {
+      this.intermediateWeights[i].dispose();
     }
-    this.weights = [];
+    this.intermediateWeights = [];
+    if (this.firstLayerWeights != null) {
+      this.firstLayerWeights.dispose();
+    }
+    if (this.lastLayerWeights != null) {
+      this.lastLayerWeights.dispose();
+    }
 
-    this.weights.push(Array2D.randTruncatedNormal(
-        [neuronsPerLayer, NUM_IMAGE_SPACE_VARIABLES + NUM_LATENT_VARIABLES], 0,
-        weightsStdev));
+    this.firstLayerWeights = dl.truncatedNormal(
+      [NUM_IMAGE_SPACE_VARIABLES + NUM_LATENT_VARIABLES, neuronsPerLayer], 0,
+      weightsStdev);
     for (let i = 0; i < MAX_LAYERS; i++) {
-      this.weights.push(Array2D.randTruncatedNormal(
-          [neuronsPerLayer, neuronsPerLayer], 0, weightsStdev));
+      this.intermediateWeights.push(dl.truncatedNormal(
+        [neuronsPerLayer, neuronsPerLayer], 0, weightsStdev));
     }
-    this.weights.push(Array2D.randTruncatedNormal(
-        [4 /** max output channels */, neuronsPerLayer], 0, weightsStdev));
-  }
-
-  setColorMode(colorMode) {
-    this.selectedColorModeName = colorMode;
+    this.lastLayerWeights = dl.truncatedNormal(
+      [neuronsPerLayer, 3 /** max output channels */], 0, weightsStdev);
   }
 
   setActivationFunction(activationFunction) {
@@ -142,57 +120,61 @@ export class CPPN {
     this.runInferenceLoop();
   }
 
-   runInferenceLoop() {
+  runInferenceLoop() {
     if (!this.isInferring) {
       return;
     }
 
-    const colorModeIndex =
-        this.colorModeNames.indexOf(this.selectedColorModeName);
-    const outputDimensions =
-        colorModeOutputDimensions[this.selectedColorModeName];
-
     this.z1Counter += 1 / this.z1Scale;
     this.z2Counter += 1 / this.z2Scale;
-    const z1 = Math.sin(this.z1Counter);
-    const z2 = Math.cos(this.z2Counter);
 
-    const intermediateResults = [];
+    const lastOutput = dl.tidy(() => {
+      const z1 = dl.scalar(Math.sin(this.z1Counter));
+      const z2 = dl.scalar(Math.cos(this.z2Counter));
+      const z1Mat = z1.mul(this.ones);
+      const z2Mat = z2.mul(this.ones);
 
-    // Add the latent variables.
-    const addLatentVariablesResultTex =
-        this.math.getTextureManager().acquireTexture(this.inputAtlas.shape);
-    nnArtUtil.addLatentVariables(
-        this.gpgpu, this.addLatentVariablesShader, this.inputAtlas.getTexture(),
-        addLatentVariablesResultTex, this.inputAtlas.shape, z1, z2);
-    const inputAtlasWithLatentVariables = Array2D.make(this.inputAtlas.shape, {
-      texture: addLatentVariablesResultTex,
-      textureShapeRC: this.inputAtlas.shape
-    });
-    intermediateResults.push(inputAtlasWithLatentVariables);
+      const concatAxis = 1;
+      const latentVars = z1Mat.concat(z2Mat, concatAxis);
 
-    let lastOutput = inputAtlasWithLatentVariables;
+      const activation = (x) =>
+        activationFunctionMap[this.selectedActivationFunctionName](x);
 
-    this.math.scope(() => {
+      let lastOutput = this.inputAtlas.concat(latentVars, concatAxis);
+      lastOutput = activation(lastOutput.matMul(this.firstLayerWeights));
+
       for (let i = 0; i < this.numLayers; i++) {
-        const matmulResult = this.math.matMul(this.weights[i], lastOutput);
-
-        lastOutput = (i === this.numLayers - 1) ?
-            this.math.sigmoid(matmulResult) :
-            activationFunctionMap[this.selectedActivationFunctionName](
-                this.math, matmulResult);
+        lastOutput = activation(lastOutput.matMul(this.intermediateWeights[i]));
       }
-      nnArtUtil.render(
-          this.gpgpu, this.renderShader, lastOutput.getTexture(),
-          outputDimensions, colorModeIndex);
+
+      return lastOutput.matMul(this.lastLayerWeights).sigmoid().reshape([
+        this.inferenceCanvas.height, this.inferenceCanvas.width, 3
+      ]);
     });
 
-    inputAtlasWithLatentVariables.dispose();
-
-    requestAnimationFrame(() => this.runInferenceLoop());
+    return renderToCanvas(lastOutput, this.inferenceCanvas)
+      .then(() => dl.nextFrame())
+      .then(() => this.runInferenceLoop());
   }
 
   stopInferenceLoop() {
     this.isInferring = false;
   }
+}
+
+function renderToCanvas(a, canvas) {
+  const [height, width, ] = a.shape;
+  const ctx = canvas.getContext('2d');
+  const imageData = new ImageData(width, height);
+  return a.data().then((data) => {
+    for (let i = 0; i < height * width; ++i) {
+      const j = i * 4;
+      const k = i * 3;
+      imageData.data[j + 0] = Math.round(255 * data[k + 0]);
+      imageData.data[j + 1] = Math.round(255 * data[k + 1]);
+      imageData.data[j + 2] = Math.round(255 * data[k + 2]);
+      imageData.data[j + 3] = 255;
+    }
+    ctx.putImageData(imageData, 0, 0);
+  });
 }

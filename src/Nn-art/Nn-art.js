@@ -35,23 +35,24 @@
 import React, {Component} from 'react';
 import {CPPN} from './cppn';
 
+// const CANVAS_UPSCALE_FACTOR = 3;
 const MAT_WIDTH = 30;
 // Standard deviations for gaussian weight initialization.
 const WEIGHTS_STDEV = .6;
 
 export default class NnArt extends Component {
     colorModeNames = ['rgb', 'rgba', 'hsv', 'hsva', 'yuv', 'yuva', 'bw'];
-    activationFunctionNames = ['tanh', 'sin', 'relu', 'step'];  
+    activationFunctionNames = ['tanh', 'sin', 'relu', 'step'];
     cppn;
     inferenceCanvas;
     constructor(props) {
         super(props);
         this.state = {
-            selectedColorModeName: 'yuv',
-            selectedActivationFunctionName: 'relu',
-            numLayers: 1,
-            z1Scale: 0,
-            z2Scale: 0
+            selectedColorModeName: 'rgb',
+            selectedActivationFunctionName: 'tanh',
+            numLayers: 2,
+            z1Scale: 1,
+            z2Scale: 1
         };
         this.ready = this.ready.bind(this);
         this.start = this.start.bind(this);
@@ -64,10 +65,8 @@ export default class NnArt extends Component {
         this.stop();
     }
     ready() {
-        const {selectedColorModeName, selectedActivationFunctionName, numLayers, z1Scale, z2Scale} = this.state;
+        const {selectedActivationFunctionName, numLayers, z1Scale, z2Scale} = this.state;
         this.cppn = new CPPN(this.inferenceCanvas);
-
-        this.cppn.setColorMode(selectedColorModeName);
 
         this.cppn.setActivationFunction(selectedActivationFunctionName);
 
@@ -81,7 +80,7 @@ export default class NnArt extends Component {
     }
     start() {
         this.stop();
-        this.cppn && this.cppn.start();        
+        this.cppn && this.cppn.start();
     }
     stop() {
         this.cppn && this.cppn.stopInferenceLoop();
