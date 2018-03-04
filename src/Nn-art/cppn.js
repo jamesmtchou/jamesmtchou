@@ -45,6 +45,7 @@ const activationFunctionMap = {
 
 const NUM_IMAGE_SPACE_VARIABLES = 3;  // x, y, r
 const NUM_LATENT_VARIABLES = 2; // z1, z2
+const LEARNING_RATE = 0.1;
 
 export class CPPN {
   inputAtlas;
@@ -53,6 +54,10 @@ export class CPPN {
   firstLayerWeights;
   intermediateWeights = [];
   lastLayerWeights;
+
+  firstLayerBiases;
+  intermediateBiases = [];
+  lastLayerBiases;
 
   z1Counter = 0;
   z2Counter = 0;
@@ -64,16 +69,20 @@ export class CPPN {
 
   isInferring = false;
   inferenceCanvas;
+  optimizer;
+  getData;
 
-  constructor(inferenceCanvas) {
+  constructor(inferenceCanvas, dataGetter) {
     this.inferenceCanvas = inferenceCanvas;
     const canvasSize = 128;
     this.inferenceCanvas.width = canvasSize;
     this.inferenceCanvas.height = canvasSize;
+    this.getData = dataGetter;
 
     this.inputAtlas = nnArtUtil.createInputAtlas(
     canvasSize, NUM_IMAGE_SPACE_VARIABLES, NUM_LATENT_VARIABLES);
     this.ones = dl.ones([this.inputAtlas.shape[0], 1]);
+    this.optimizer = dl.train.sgd(LEARNING_RATE);
   }
 
   generateWeights(neuronsPerLayer, weightsStdev) {
@@ -88,15 +97,22 @@ export class CPPN {
       this.lastLayerWeights.dispose();
     }
 
-    this.firstLayerWeights = dl.truncatedNormal(
+    this.firstLayerWeights = dl.variable(dl.truncatedNormal(
       [NUM_IMAGE_SPACE_VARIABLES + NUM_LATENT_VARIABLES, neuronsPerLayer], 0,
-      weightsStdev);
+      weightsStdev));
+    this.firstLayerBiases = dl.variable(dl.zeros(
+      [1]));
+
     for (let i = 0; i < MAX_LAYERS; i++) {
-      this.intermediateWeights.push(dl.truncatedNormal(
-        [neuronsPerLayer, neuronsPerLayer], 0, weightsStdev));
+      this.intermediateWeights.push(dl.variable(dl.truncatedNormal(
+        [neuronsPerLayer, neuronsPerLayer], 0, weightsStdev)));
+      this.intermediateBiases.push(dl.variable(dl.zeros(
+        [1])));
     }
-    this.lastLayerWeights = dl.truncatedNormal(
-      [neuronsPerLayer, 3 /** max output channels */], 0, weightsStdev);
+    this.lastLayerWeights = dl.variable(dl.truncatedNormal(
+      [neuronsPerLayer, 3 /** max output channels */], 0, weightsStdev));
+    this.lastLayerBiases = dl.variable(dl.zeros(
+      [1]));
   }
 
   setActivationFunction(activationFunction) {
@@ -115,9 +131,40 @@ export class CPPN {
     this.z2Scale = z2Scale;
   }
 
+  loss(prediction, actual) {
+    const cost = prediction.sub(actual).square().mean().mean().mean();
+    return cost;
+  }
+
   start() {
     this.isInferring = true;
     this.runInferenceLoop();
+  }
+
+  runModel(withCounter) {
+    return dl.tidy(() => {
+      const z1 = withCounter ? dl.scalar(Math.sin(this.z1Counter)) : dl.scalar(1);
+      const z2 = withCounter ? dl.scalar(Math.cos(this.z2Counter)) : dl.scalar(1);
+      const z1Mat = z1.mul(this.ones);
+      const z2Mat = z2.mul(this.ones);
+
+      const concatAxis = 1;
+      const latentVars = z1Mat.concat(z2Mat, concatAxis);
+
+      const activation = (x) =>
+        activationFunctionMap[this.selectedActivationFunctionName](x);
+
+      let lastOutput = this.inputAtlas.concat(latentVars, concatAxis);
+      lastOutput = activation(lastOutput.matMul(this.firstLayerWeights).add(this.firstLayerBiases));
+
+      for (let i = 0; i < this.numLayers; i++) {
+        lastOutput = activation(lastOutput.matMul(this.intermediateWeights[i]).add(this.intermediateBiases[i]));
+      }
+
+      return lastOutput.matMul(this.lastLayerWeights).add(this.lastLayerBiases).sigmoid().reshape([
+        this.inferenceCanvas.height, this.inferenceCanvas.width, 3
+      ]).mul(dl.scalar(255)).ceil();
+    });
   }
 
   runInferenceLoop() {
@@ -129,30 +176,70 @@ export class CPPN {
     this.z2Counter += 1 / this.z2Scale;
 
     const lastOutput = dl.tidy(() => {
-      const z1 = dl.scalar(Math.sin(this.z1Counter));
-      const z2 = dl.scalar(Math.cos(this.z2Counter));
-      const z1Mat = z1.mul(this.ones);
-      const z2Mat = z2.mul(this.ones);
+      // let convolvedOutput;
+      const data = this.getData() ? this.getData().asType('float32') : dl.scalar(0);
 
-      const concatAxis = 1;
-      const latentVars = z1Mat.concat(z2Mat, concatAxis);
+      // this.optimizer.minimize(() => {
+      //   const output = this.runModel();
+      //   // if (!data) {
+      //   //   return dl.scalar(0);
+      //   // }
+      //
+      //   // const filter = dl.tensor4d([
+      //   //   [[[1., 1., 1.],
+      //   //     [1., 1., 1.],
+      //   //     [1., 1., 1.]],
+      //   //
+      //   //     [[1., 1., 1.],
+      //   //       [1., 1., 1.],
+      //   //       [1., 1., 1.]],
+      //   //
+      //   //     [[1., 1., 1.],
+      //   //       [1., 1., 1.],
+      //   //       [1., 1., 1.]]],
+      //   //
+      //   //
+      //   //   [[[1., 1., 1.],
+      //   //     [1., 1., 1.],
+      //   //     [1., 1., 1.]],
+      //   //
+      //   //     [[1., 1., 1.],
+      //   //       [1., 1., 1.],
+      //   //       [1., 1., 1.]],
+      //   //
+      //   //     [[1., 1., 1.],
+      //   //       [1., 1., 1.],
+      //   //       [1., 1., 1.]]],
+      //   //
+      //   //
+      //   //   [[[1., 1., 1.],
+      //   //     [1., 1., 1.],
+      //   //     [1., 1., 1.]],
+      //   //
+      //   //     [[1., 1., 1.],
+      //   //       [1., 1., 1.],
+      //   //       [1., 1., 1.]],
+      //   //
+      //   //     [[1., 1., 1.],
+      //   //       [1., 1., 1.],
+      //   //       [1., 1., 1.]]]
+      //   // ]).div(dl.scalar(5));
+      //   // convolvedOutput = dl.keep(output.conv2d(filter, 1, 'same'));
+      //   // return this.loss(output.conv2d(filter, 1, 'same'), data.conv2d(filter, 1, 'same'));
+      //   return this.loss(output, data);
+      // });
+      const dynamicOutput = this.runModel(true);
 
-      const activation = (x) =>
-        activationFunctionMap[this.selectedActivationFunctionName](x);
+      const comp = dl.scalar(255).sub(dynamicOutput).mul(data.greater(dynamicOutput).asType('float32'));
 
-      let lastOutput = this.inputAtlas.concat(latentVars, concatAxis);
-      lastOutput = activation(lastOutput.matMul(this.firstLayerWeights));
+      const norm = dynamicOutput.mul(data.lessEqual(dynamicOutput).asType('float32'));
 
-      for (let i = 0; i < this.numLayers; i++) {
-        lastOutput = activation(lastOutput.matMul(this.intermediateWeights[i]));
-      }
-
-      return lastOutput.matMul(this.lastLayerWeights).sigmoid().reshape([
-        this.inferenceCanvas.height, this.inferenceCanvas.width, 3
-      ]);
+      return norm.add(comp);
+      // return dynamicOutput;
+      // return data
     });
 
-    return renderToCanvas(lastOutput, this.inferenceCanvas)
+    return renderToCanvas(lastOutput/*this.getData().conv2d(filter, 1, 'same')*/, this.inferenceCanvas)
       .then(() => dl.nextFrame())
       .then(() => this.runInferenceLoop());
   }
@@ -167,12 +254,13 @@ function renderToCanvas(a, canvas) {
   const ctx = canvas.getContext('2d');
   const imageData = new ImageData(width, height);
   return a.data().then((data) => {
+    a.dispose();
     for (let i = 0; i < height * width; ++i) {
       const j = i * 4;
       const k = i * 3;
-      imageData.data[j + 0] = Math.round(255 * data[k + 0]);
-      imageData.data[j + 1] = Math.round(255 * data[k + 1]);
-      imageData.data[j + 2] = Math.round(255 * data[k + 2]);
+      imageData.data[j + 0] = data[k + 0];
+      imageData.data[j + 1] = data[k + 1];
+      imageData.data[j + 2] = data[k + 2];
       imageData.data[j + 3] = 255;
     }
     ctx.putImageData(imageData, 0, 0);

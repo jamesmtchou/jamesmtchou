@@ -12,7 +12,7 @@ body {
     display: flex;
     align-content: center;
     align-items: center;
-    justify-content: center;    
+    justify-content: center;
 }
 
 .app {
@@ -28,27 +28,38 @@ body {
 
 .canvas-wrapper {
     position: fixed;
-    bottom: 4rem;
-    right: 4rem;
-    -webkit-transform: translate(50%, 50%) scale(0, 0);
-    -moz-transform: translate(50%, 50%) scale(0, 0);
-    transform: translate(50%, 50%) scale(0, 0);
-    -webkit-transition: transform 0.5s linear;
-    -moz-transition: transform 0.5s linear;
-    transition: transform 0.5s linear;
-    height: 284vw;
-    width: 284vw;    
-    min-height: 284vh;
-    min-width: 284vh;    
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%) scale(0, 0);
+    -moz-transform: translate(-50%, -50%) scale(0, 0);
+    transform: translate(-50%, -50%) scale(0, 0);
+
+    -webkit-transition: transform 0.3s linear 0.1s, border-radius 0.1s linear;
+    -moz-transition: transform 0.3s linear 0.1s, border-radius 0.1s linear;
+    transition: transform 0.3s linear 0.1s, border-radius 0.1s linear;
+
+    height: 100vw;
+    width: 100vw;
+    min-height: 100vh;
+    min-width: 100vh;
     border-radius: 50%;
     overflow: hidden;
     will-change: transform;
 }
 
 .canvas-wrapper.enabled {
-    -webkit-transform: translate(50%, 50%) scale(1, 1);
-    -moz-transform: translate(50%, 50%) scale(1, 1);
-    transform: translate(50%, 50%) scale(1, 1);
+    -webkit-transition: transform 0.3s linear, border-radius 0.1s linear 0.3s;
+    -moz-transition: transform 0.3s linear, border-radius 0.1s linear 0.3s;
+    transition: transform 0.3s linear, border-radius 0.1s linear 0.3s;
+
+    border-radius: 0;
+    -webkit-transform: translate(-50%, -50%) scale(1, 1);
+    -moz-transform: translate(-50%, -50%) scale(1, 1);
+    transform: translate(-50%, -50%) scale(1, 1);
+}
+
+.canvas-wrapper video {
+    display: none;
 }
 
 .nn-buttons-container {
@@ -76,7 +87,7 @@ body {
 .cppn-link-button {
     -webkit-transition: bottom 0.5s linear;
     -moz-transition: bottom 0.5s linear;
-    transition: bottom 0.5s linear;    
+    transition: bottom 0.5s linear;
 }
 
 .cppn-link-button.linkEnabled {
@@ -318,7 +329,7 @@ li {
         left: 0;
         top: 0;
     }
-    
+
     .app {
         padding: 0;
         width: auto;
@@ -329,21 +340,6 @@ li {
         -moz-transform: none;
         transform: none;
     }
-
-    .canvas-wrapper {
-        top: 4rem;
-        bottom: auto;
-        -webkit-transform: translate(50%, -50%) scale(0, 0);
-        -moz-transform: translate(50%, -50%) scale(0, 0);
-        transform: translate(50%, -50%) scale(0, 0);
-    }
-
-    .canvas-wrapper.enabled {
-        -webkit-transform: translate(50%, -50%) scale(1, 1);
-        -moz-transform: translate(50%, -50%) scale(1, 1);
-        transform: translate(50%, -50%) scale(1, 1);
-    }
-    
 
     .nn-buttons-container {
         display: none;
