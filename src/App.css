@@ -346,7 +346,6 @@ li {
     
 
     .nn-buttons-container {
-        display: none;
         top: 4rem;
         bottom: auto;
         -webkit-transform: translate(50%, -50%);
