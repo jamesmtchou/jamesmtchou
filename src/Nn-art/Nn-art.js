@@ -32,8 +32,8 @@
  * =============================================================================
  */
 
-import React, {Component} from 'react';
-import {CPPN} from './cppn';
+import React, { Component, Fragment } from 'react';
+import { CPPN } from './cppn';
 import * as dl from 'deeplearn';
 
 // const CANVAS_UPSCALE_FACTOR = 3;
@@ -155,10 +155,13 @@ export default class NnArt extends Component {
     }
     render() {
         const { nnArtEnabled } = this.props;
-        return <div className={`canvas-wrapper ${nnArtEnabled ? 'enabled' : ''}`}>
-          <canvas id="inference" ref={(el) => { this.inferenceCanvas = el; }}></canvas>
-          <video ref={(video) => {this.video = video}}
-                 height="128" width="128" autoPlay playsInline/>
-        </div>;
+        nnArtEnabled ? this.start() : this.stop();
+        return (
+            <Fragment>
+                <canvas id="inference" className={`${nnArtEnabled ? 'enabled' : ''}`} ref={(el) => { this.inferenceCanvas = el; }}/>
+                <video ref={(video) => {this.video = video}}
+                    height="128" width="128" autoPlay playsInline/>
+            </Fragment>
+        );
     }
 }
