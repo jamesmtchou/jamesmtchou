@@ -22,33 +22,18 @@ body {
 }
 
 #inference {
-    height: 100%;
-    width: 100%;
-}
-
-.canvas-wrapper {
+    height: 100vmax;
+    width: 100vmax;
     position: fixed;
-    bottom: 4rem;
-    right: 4rem;
-    -webkit-transform: translate(50%, 50%) scale(0, 0);
-    -moz-transform: translate(50%, 50%) scale(0, 0);
-    transform: translate(50%, 50%) scale(0, 0);
-    -webkit-transition: transform 0.5s linear;
-    -moz-transition: transform 0.5s linear;
-    transition: transform 0.5s linear;
-    height: 284vw;
-    width: 284vw;    
-    min-height: 284vh;
-    min-width: 284vh;    
-    border-radius: 50%;
-    overflow: hidden;
-    will-change: transform;
+    right: calc(50vw - 50vmax);
+    bottom: calc(50vh - 50vmax);
+    transition: clip-path 0.4s linear;
+    clip-path: circle(0 at right calc(-50vw + 50vmax + 4rem) bottom calc(-50vh + 50vmax + 4rem));
+    will-change: clip-path;
 }
 
-.canvas-wrapper.enabled {
-    -webkit-transform: translate(50%, 50%) scale(1, 1);
-    -moz-transform: translate(50%, 50%) scale(1, 1);
-    transform: translate(50%, 50%) scale(1, 1);
+#inference.enabled {
+    clip-path: circle(142vmax at right calc(-50vw + 50vmax + 4rem) bottom calc(-50vh + 50vmax + 4rem));
 }
 
 .nn-buttons-container {
@@ -330,18 +315,14 @@ li {
         transform: none;
     }
 
-    .canvas-wrapper {
-        top: 4rem;
+    #inference {
+        top: calc(50vh - 50vmax);
         bottom: auto;
-        -webkit-transform: translate(50%, -50%) scale(0, 0);
-        -moz-transform: translate(50%, -50%) scale(0, 0);
-        transform: translate(50%, -50%) scale(0, 0);
+        clip-path: circle(0 at right calc(-50vw + 50vmax + 4rem) top calc(-50vh + 50vmax + 4rem));
     }
 
-    .canvas-wrapper.enabled {
-        -webkit-transform: translate(50%, -50%) scale(1, 1);
-        -moz-transform: translate(50%, -50%) scale(1, 1);
-        transform: translate(50%, -50%) scale(1, 1);
+    #inference.enabled {
+        clip-path: circle(142vmax at right calc(-50vw + 50vmax + 4rem) top calc(-50vh + 50vmax + 4rem));
     }
     
 

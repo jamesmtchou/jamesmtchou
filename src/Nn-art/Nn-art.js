@@ -32,8 +32,8 @@
  * =============================================================================
  */
 
-import React, {Component} from 'react';
-import {CPPN} from './cppn';
+import React, { Component } from 'react';
+import { CPPN } from './cppn';
 
 // const CANVAS_UPSCALE_FACTOR = 3;
 const MAT_WIDTH = 30;
@@ -91,6 +91,8 @@ export default class NnArt extends Component {
     render() {
         const {nnArtEnabled} = this.props;
         nnArtEnabled ? this.start() : this.stop();
-        return <div className={`canvas-wrapper ${nnArtEnabled ? 'enabled' : ''}`}><canvas id="inference" ref={(el) => { this.inferenceCanvas = el; }}></canvas></div>;
+        return (
+            <canvas id="inference" className={`${nnArtEnabled ? 'enabled' : ''}`} ref={(el) => { this.inferenceCanvas = el; }}/>
+        );
     }
 }
