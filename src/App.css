@@ -56,19 +56,28 @@ video {
     animation: none;
 }
 
-.cppn-link-button  {
+.action-button {
     position: absolute;
     right: 0;
     bottom: 0;
-}
-
-.cppn-link-button {
     -webkit-transition: bottom 0.5s linear;
     -moz-transition: bottom 0.5s linear;
     transition: bottom 0.5s linear;
 }
 
-.cppn-link-button.linkEnabled {
+.cppn-link-button.buttonEnabled {
+    bottom: 2.8rem;
+}
+
+.nn-buttons-container.secondary .cppn-link-button {
+    bottom: 2.8rem;
+}
+
+.nn-buttons-container.secondary .cppn-link-button.buttonEnabled {
+    bottom: 5.6rem;
+}
+
+.video-button.buttonEnabled {
     bottom: 2.8rem;
 }
 
@@ -338,14 +347,29 @@ li {
         transform: translate(50%, -50%);
     }
 
-    .cppn-link-button  {
+    .action-button {
         position: absolute;
         right: 0;
         top: 0;
         bottom: auto;
     }
 
-    .cppn-link-button.linkEnabled {
+    .cppn-link-button.buttonEnabled {
+        top: 2.8rem;
+        bottom: auto;
+    }
+
+    .nn-buttons-container.secondary .cppn-link-button {
+        top: 2.8rem;
+        bottom: auto;
+    }
+
+    .nn-buttons-container.secondary .cppn-link-button.buttonEnabled {
+        top: 5.6rem;
+        bottom: auto;
+    }
+
+    .video-button.buttonEnabled {
         top: 2.8rem;
         bottom: auto;
     }

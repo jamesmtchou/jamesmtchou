@@ -23,13 +23,12 @@ class Shell extends Component {
         this.setState({videoEnabled: !this.state.videoEnabled});
     }
     render() {
-        const { nnArtEnabled } = this.state;
         return (
             <MuiThemeProvider>
                 <div id="index">
                     <NnArt {...this.state}/>
                     <App/>
-                    <NnArtButton nnArtEnabled={nnArtEnabled} onClick={this.toggleNnArt} onClickSecondary={this.toggleVideo}/>
+                    <NnArtButton {...this.state} onClick={this.toggleNnArt} onClickSecondary={this.toggleVideo}/>
                 </div>
             </MuiThemeProvider>
         );
