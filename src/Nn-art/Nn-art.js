@@ -29,11 +29,13 @@
  * -----------------------------------------------------------------------------
  * Modified to use pure ES6 from TypeScript.
  * Implemented React version of the nn-art.html Polymer component.
+ * Added camera video capturing to combine with NN Art.
  * =============================================================================
  */
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { CPPN } from './cppn';
+import * as dl from 'deeplearn';
 
 // const CANVAS_UPSCALE_FACTOR = 3;
 const MAT_WIDTH = 30;
@@ -45,6 +47,10 @@ export default class NnArt extends Component {
     activationFunctionNames = ['tanh', 'sin', 'relu', 'step'];
     cppn;
     inferenceCanvas;
+    video;
+    image = null;
+    timer;
+    isVideoPlaying = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -52,21 +58,45 @@ export default class NnArt extends Component {
             selectedActivationFunctionName: 'tanh',
             numLayers: 2,
             z1Scale: 1,
-            z2Scale: 1
+            z2Scale: 1,
+            stream: null,
         };
         this.ready = this.ready.bind(this);
-        this.start = this.start.bind(this);
-        this.stop = this.stop.bind(this);
+        this.setupCamera = this.setupCamera.bind(this);
+        this.startCppn = this.startCppn.bind(this);
+        this.startVideo = this.startVideo.bind(this);
+        this.stopCppn = this.stopCppn.bind(this);
+        this.stopVideo = this.stopVideo.bind(this);
+        this.setVideoData = this.setVideoData.bind(this);
+        this.getVideoData = this.getVideoData.bind(this);
     }
     componentDidMount() {
         this.ready();
+
+        const { nnArtEnabled, videoEnabled } = this.props;
+        nnArtEnabled ? this.startCppn() : this.stopCppn();
+        videoEnabled ? this.startVideo() : this.stopVideo();
     }
+    componentWillReceiveProps(nextProps) {
+        const { nnArtEnabled, videoEnabled } = this.props;
+        const { nnArtEnabled: nextNnArtEnabled, videoEnabled: nextVideoEnabled } = nextProps;
+
+        if (nextNnArtEnabled && !nnArtEnabled) this.startCppn();
+
+        if (!nextNnArtEnabled && nnArtEnabled) this.stopCppn();
+
+        if (nextVideoEnabled && !videoEnabled) this.startVideo();
+
+        if (!nextVideoEnabled && videoEnabled) this.stopVideo();
+    }
+
     componentWillUnmount() {
-        this.stop();
+        this.stopCppn();
+        this.stopVideo();
     }
     ready() {
         const {selectedActivationFunctionName, numLayers, z1Scale, z2Scale} = this.state;
-        this.cppn = new CPPN(this.inferenceCanvas);
+        this.cppn = new CPPN(this.inferenceCanvas, this.getVideoData);
 
         this.cppn.setActivationFunction(selectedActivationFunctionName);
 
@@ -78,21 +108,60 @@ export default class NnArt extends Component {
 
         this.cppn.generateWeights(MAT_WIDTH, WEIGHTS_STDEV);
     }
-    start() {
-        this.stop();
+    setupCamera() {
+        return navigator.mediaDevices.getUserMedia({video: true, audio: false})
+            .then((stream) => {
+                this.video.srcObject = stream;
+                this.video.addEventListener('playing', ()=> this.isVideoPlaying = true);
+                this.video.addEventListener('paused', ()=> this.isVideoPlaying = false);
+          });
+    }
+    startVideo() {
+        this.stopVideo();
+
+        if (!this.video.srcObject) {
+            this.setupCamera().then(() => {
+              this.video.play();
+              this.timer = requestAnimationFrame(this.setVideoData);
+            });
+        } else {
+            this.video.play();
+            this.timer = requestAnimationFrame(this.setVideoData);
+        }
+    }
+    stopVideo() {
+        this.video.pause();
+        this.image = null;
+        this.timer && cancelAnimationFrame(this.timer);
+    }
+
+    setVideoData() {
+        this.image && this.image.dispose();
+        this.image = dl.fromPixels(this.video).reverse(1);
+        this.timer = requestAnimationFrame(this.setVideoData);
+    }
+    getVideoData() {
+        return this.isVideoPlaying ? this.image : null;
+    }
+
+    startCppn() {
+        this.stopCppn();
         this.cppn && this.cppn.start();
     }
-    stop() {
+    stopCppn() {
         this.cppn && this.cppn.stopInferenceLoop();
     }
     convertZScale(z) {
         return (103 - z);
     }
     render() {
-        const {nnArtEnabled} = this.props;
-        nnArtEnabled ? this.start() : this.stop();
+        const { nnArtEnabled } = this.props;
         return (
-            <canvas id="inference" className={`${nnArtEnabled ? 'enabled' : ''}`} ref={(el) => { this.inferenceCanvas = el; }}/>
+            <Fragment>
+                <canvas id="inference" className={`${nnArtEnabled ? 'enabled' : ''}`} ref={(el) => { this.inferenceCanvas = el; }}/>
+                <video ref={(video) => {this.video = video}}
+                    height="128" width="128" autoPlay playsInline/>
+            </Fragment>
         );
     }
 }

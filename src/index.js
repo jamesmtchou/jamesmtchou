@@ -9,20 +9,26 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 class Shell extends Component {
     constructor(props) {
         super(props);
-        this.state = {nnArtEnabled: false};
+        this.state = {
+            nnArtEnabled: false,
+            videoEnabled: false,
+        };
         this.toggleNnArt = this.toggleNnArt.bind(this);
+        this.toggleVideo = this.toggleVideo.bind(this);
     }
     toggleNnArt() {
         this.setState({nnArtEnabled: !this.state.nnArtEnabled});
     }
+    toggleVideo() {
+        this.setState({videoEnabled: !this.state.videoEnabled});
+    }
     render() {
-        const {nnArtEnabled} = this.state;
         return (
             <MuiThemeProvider>
                 <div id="index">
-                    <NnArt nnArtEnabled={nnArtEnabled}/>
+                    <NnArt {...this.state}/>
                     <App/>
-                    <NnArtButton nnArtEnabled={nnArtEnabled} onClick={this.toggleNnArt} />
+                    <NnArtButton {...this.state} onClick={this.toggleNnArt} onClickSecondary={this.toggleVideo}/>
                 </div>
             </MuiThemeProvider>
         );

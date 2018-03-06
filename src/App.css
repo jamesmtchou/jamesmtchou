@@ -12,7 +12,7 @@ body {
     display: flex;
     align-content: center;
     align-items: center;
-    justify-content: center;    
+    justify-content: center;
 }
 
 .app {
@@ -36,6 +36,10 @@ body {
     clip-path: circle(142vmax at right calc(-50vw + 50vmax + 4rem) bottom calc(-50vh + 50vmax + 4rem));
 }
 
+video {
+    display: none;
+}
+
 .nn-buttons-container {
     opacity: 0.75;
     animation: hue-animation 8s infinite;
@@ -52,19 +56,28 @@ body {
     animation: none;
 }
 
-.cppn-link-button  {
+.action-button {
     position: absolute;
     right: 0;
     bottom: 0;
-}
-
-.cppn-link-button {
     -webkit-transition: bottom 0.5s linear;
     -moz-transition: bottom 0.5s linear;
-    transition: bottom 0.5s linear;    
+    transition: bottom 0.5s linear;
 }
 
-.cppn-link-button.linkEnabled {
+.cppn-link-button.buttonEnabled {
+    bottom: 2.8rem;
+}
+
+.nn-buttons-container.secondary .cppn-link-button {
+    bottom: 2.8rem;
+}
+
+.nn-buttons-container.secondary .cppn-link-button.buttonEnabled {
+    bottom: 5.6rem;
+}
+
+.video-button.buttonEnabled {
     bottom: 2.8rem;
 }
 
@@ -303,7 +316,7 @@ li {
         left: 0;
         top: 0;
     }
-    
+
     .app {
         padding: 0;
         width: auto;
@@ -334,14 +347,29 @@ li {
         transform: translate(50%, -50%);
     }
 
-    .cppn-link-button  {
+    .action-button {
         position: absolute;
         right: 0;
         top: 0;
         bottom: auto;
     }
 
-    .cppn-link-button.linkEnabled {
+    .cppn-link-button.buttonEnabled {
+        top: 2.8rem;
+        bottom: auto;
+    }
+
+    .nn-buttons-container.secondary .cppn-link-button {
+        top: 2.8rem;
+        bottom: auto;
+    }
+
+    .nn-buttons-container.secondary .cppn-link-button.buttonEnabled {
+        top: 5.6rem;
+        bottom: auto;
+    }
+
+    .video-button.buttonEnabled {
         top: 2.8rem;
         bottom: auto;
     }
