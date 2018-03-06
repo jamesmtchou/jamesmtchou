@@ -154,7 +154,6 @@ export class CPPN {
       const activation = (x) =>
         activationFunctionMap[this.selectedActivationFunctionName](x);
 
-      // let lastOutput = this.getData() ? this.getData().asType('float32').reshape([-1, 3]).add(this.inputAtlas).concat(latentVars, concatAxis) : this.inputAtlas.concat(latentVars, concatAxis);
       let lastOutput = this.inputAtlas.concat(latentVars, concatAxis);
       lastOutput = activation(lastOutput.matMul(this.firstLayerWeights).add(this.firstLayerBiases));
 
