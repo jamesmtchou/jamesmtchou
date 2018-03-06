@@ -154,8 +154,8 @@ export class CPPN {
       const activation = (x) =>
         activationFunctionMap[this.selectedActivationFunctionName](x);
 
-      // let lastOutput = this.getData() ? this.getData().asType('float32').reshape([-1, 3]).add(this.inputAtlas).concat(latentVars, concatAxis) : this.inputAtlas.concat(latentVars, concatAxis);
-      let lastOutput = this.inputAtlas.concat(latentVars, concatAxis);
+      let lastOutput = this.getData() ? this.getData().asType('float32').reshape([-1, 3]).add(this.inputAtlas).concat(latentVars, concatAxis) : this.inputAtlas.concat(latentVars, concatAxis);
+      // let lastOutput = this.inputAtlas.concat(latentVars, concatAxis);
       lastOutput = activation(lastOutput.matMul(this.firstLayerWeights).add(this.firstLayerBiases));
 
       for (let i = 0; i < this.numLayers; i++) {
@@ -177,12 +177,13 @@ export class CPPN {
     this.z2Counter += 1 / this.z2Scale;
 
     const lastOutput = dl.tidy(() => {
-      const data = this.getData() ? this.getData().asType('float32') : dl.scalar(0);
+      // const data = this.getData() ? this.getData().asType('float32') : dl.scalar(0);
       const dynamicOutput = this.runModel(true);
-      const logicMap = data.greater(dynamicOutput);
-      const comp = dl.scalar(255).sub(dynamicOutput).mul(logicMap.asType('float32'));
-      const norm = dynamicOutput.mul(dl.logicalNot(logicMap).asType('float32'));
-      return norm.add(comp);
+      // const logicMap = data.greater(dynamicOutput);
+      // const comp = dl.scalar(255).sub(dynamicOutput).mul(logicMap.asType('float32'));
+      // const norm = dynamicOutput.mul(dl.logicalNot(logicMap).asType('float32'));
+      // return norm.add(comp);
+      return dynamicOutput;
     });
 
     return renderToCanvas(lastOutput, this.inferenceCanvas)
