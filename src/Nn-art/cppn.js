@@ -154,6 +154,7 @@ export class CPPN {
       const activation = (x) =>
         activationFunctionMap[this.selectedActivationFunctionName](x);
 
+      // let lastOutput = this.getData() ? this.getData().asType('float32').reshape([-1, 3]).add(this.inputAtlas).concat(latentVars, concatAxis) : this.inputAtlas.concat(latentVars, concatAxis);
       let lastOutput = this.inputAtlas.concat(latentVars, concatAxis);
       lastOutput = activation(lastOutput.matMul(this.firstLayerWeights).add(this.firstLayerBiases));
 
@@ -229,11 +230,9 @@ export class CPPN {
       //   return this.loss(output, data);
       // });
       const dynamicOutput = this.runModel(true);
-
-      const comp = dl.scalar(255).sub(dynamicOutput).mul(data.greater(dynamicOutput).asType('float32'));
-
-      const norm = dynamicOutput.mul(data.lessEqual(dynamicOutput).asType('float32'));
-
+      const logicMap = data.greater(dynamicOutput);
+      const comp = dl.scalar(255).sub(dynamicOutput).mul(logicMap.asType('float32'));
+      const norm = dynamicOutput.mul(dl.logicalNot(logicMap).asType('float32'));
       return norm.add(comp);
       // return dynamicOutput;
       // return data
