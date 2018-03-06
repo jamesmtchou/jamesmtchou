@@ -29,6 +29,7 @@
  * -----------------------------------------------------------------------------
  * Modified to use pure ES6 from TypeScript.
  * Implemented React version of the nn-art.html Polymer component.
+ * Added camera video capturing to combine with NN Art.
  * =============================================================================
  */
 

@@ -27,7 +27,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * -----------------------------------------------------------------------------
- * Modified to use pure ES6 from TypeScript.
+ * Modified to use pure ES6 from TypeScript. Implemented video overlay.
  * =============================================================================
  */
 
