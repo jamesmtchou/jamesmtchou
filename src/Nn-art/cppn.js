@@ -177,68 +177,15 @@ export class CPPN {
     this.z2Counter += 1 / this.z2Scale;
 
     const lastOutput = dl.tidy(() => {
-      // let convolvedOutput;
       const data = this.getData() ? this.getData().asType('float32') : dl.scalar(0);
-
-      // this.optimizer.minimize(() => {
-      //   const output = this.runModel();
-      //   // if (!data) {
-      //   //   return dl.scalar(0);
-      //   // }
-      //
-      //   // const filter = dl.tensor4d([
-      //   //   [[[1., 1., 1.],
-      //   //     [1., 1., 1.],
-      //   //     [1., 1., 1.]],
-      //   //
-      //   //     [[1., 1., 1.],
-      //   //       [1., 1., 1.],
-      //   //       [1., 1., 1.]],
-      //   //
-      //   //     [[1., 1., 1.],
-      //   //       [1., 1., 1.],
-      //   //       [1., 1., 1.]]],
-      //   //
-      //   //
-      //   //   [[[1., 1., 1.],
-      //   //     [1., 1., 1.],
-      //   //     [1., 1., 1.]],
-      //   //
-      //   //     [[1., 1., 1.],
-      //   //       [1., 1., 1.],
-      //   //       [1., 1., 1.]],
-      //   //
-      //   //     [[1., 1., 1.],
-      //   //       [1., 1., 1.],
-      //   //       [1., 1., 1.]]],
-      //   //
-      //   //
-      //   //   [[[1., 1., 1.],
-      //   //     [1., 1., 1.],
-      //   //     [1., 1., 1.]],
-      //   //
-      //   //     [[1., 1., 1.],
-      //   //       [1., 1., 1.],
-      //   //       [1., 1., 1.]],
-      //   //
-      //   //     [[1., 1., 1.],
-      //   //       [1., 1., 1.],
-      //   //       [1., 1., 1.]]]
-      //   // ]).div(dl.scalar(5));
-      //   // convolvedOutput = dl.keep(output.conv2d(filter, 1, 'same'));
-      //   // return this.loss(output.conv2d(filter, 1, 'same'), data.conv2d(filter, 1, 'same'));
-      //   return this.loss(output, data);
-      // });
       const dynamicOutput = this.runModel(true);
       const logicMap = data.greater(dynamicOutput);
       const comp = dl.scalar(255).sub(dynamicOutput).mul(logicMap.asType('float32'));
       const norm = dynamicOutput.mul(dl.logicalNot(logicMap).asType('float32'));
       return norm.add(comp);
-      // return dynamicOutput;
-      // return data
     });
 
-    return renderToCanvas(lastOutput/*this.getData().conv2d(filter, 1, 'same')*/, this.inferenceCanvas)
+    return renderToCanvas(lastOutput, this.inferenceCanvas)
       .then(() => dl.nextFrame())
       .then(() => this.runInferenceLoop());
   }
