@@ -194,6 +194,10 @@ export class CPPN {
   }
 }
 
+function roundAndClipByValue(value, min, max) {
+  return Math.min(Math.max(Math.round(value), min), max);
+}
+
 function renderToCanvas(a, canvas) {
   const [height, width, ] = a.shape;
   const ctx = canvas.getContext('2d');
@@ -203,9 +207,9 @@ function renderToCanvas(a, canvas) {
     for (let i = 0; i < height * width; ++i) {
       const j = i * 4;
       const k = i * 3;
-      imageData.data[j + 0] = data[k + 0];
-      imageData.data[j + 1] = data[k + 1];
-      imageData.data[j + 2] = data[k + 2];
+      imageData.data[j + 0] = roundAndClipByValue(data[k + 0], 0, 255);
+      imageData.data[j + 1] = roundAndClipByValue(data[k + 1], 0, 255);
+      imageData.data[j + 2] = roundAndClipByValue(data[k + 2], 0, 255);
       imageData.data[j + 3] = 255;
     }
     ctx.putImageData(imageData, 0, 0);
