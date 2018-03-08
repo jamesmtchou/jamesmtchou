@@ -176,10 +176,24 @@ export class CPPN {
     this.z2Counter += 1 / this.z2Scale;
 
     const lastOutput = dl.tidy(() => {
-      const data = this.getData() ? this.getData().asType('float32') : dl.scalar(0);
+      const data = this.getData() ? this.getData().asType('float32') : dl.scalar(1);
       const dynamicOutput = this.runModel(true);
-      const logicMap = data.greater(dynamicOutput);
-      const comp = dl.scalar(255).sub(dynamicOutput).mul(logicMap.asType('float32'));
+      // const logicMap = data.greater(dynamicOutput);
+      // const comp = dl.scalar(255).sub(dynamicOutput).mul(logicMap.asType('float32'));
+      // const norm = dynamicOutput.mul(dl.logicalNot(logicMap).asType('float32'));
+
+      // let filter = dl.tensor2d([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]]);
+      // filter = filter.expandDims(2).tile([1, 1, 3]).expandDims(3).tile([1, 1, 1, 3]);
+      // const edgeFilteredData = this.getData() ? data.conv2d(filter, 1, 'same') : dl.zeros([128, 128, 3]);
+
+      // return dl.where(dl.logicalXor(
+      //     dl.ones([128, 64, 3]).concat(dl.zeros([128, 64, 3]), 1).asType('bool'),
+      //     edgeFilteredData.greater(dl.scalar(10))
+      //   ), nnArtUtil.computeComplementaryColor(dynamicOutput),
+      //   dynamicOutput);
+
+      const logicMap = data.abs(dynamicOutput).less(dl.scalar(122));
+      const comp = nnArtUtil.computeComplementaryColor(dynamicOutput).mul(logicMap.asType('float32'));
       const norm = dynamicOutput.mul(dl.logicalNot(logicMap).asType('float32'));
       return norm.add(comp);
     });
