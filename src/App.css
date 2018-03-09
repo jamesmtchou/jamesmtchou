@@ -60,9 +60,9 @@ video {
     position: absolute;
     right: 0;
     bottom: 0;
-    -webkit-transition: bottom 0.5s linear;
-    -moz-transition: bottom 0.5s linear;
-    transition: bottom 0.5s linear;
+    -webkit-transition: bottom 0.5s linear 0.25s;
+    -moz-transition: bottom 0.5s linear 0.25s;
+    transition: bottom 0.5s linear 0.25s;
 }
 
 .cppn-link-button.buttonEnabled {
