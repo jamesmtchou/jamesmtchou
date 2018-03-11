@@ -42,6 +42,8 @@ const MAT_WIDTH = 30;
 // Standard deviations for gaussian weight initialization.
 const WEIGHTS_STDEV = .6;
 
+let counter = 0;
+
 export default class NnArt extends Component {
     colorModeNames = ['rgb', 'rgba', 'hsv', 'hsva', 'yuv', 'yuva', 'bw'];
     activationFunctionNames = ['tanh', 'sin', 'relu', 'step'];
@@ -55,8 +57,8 @@ export default class NnArt extends Component {
         super(props);
         this.state = {
             selectedColorModeName: 'rgb',
-            selectedActivationFunctionName: 'tanh',
-            numLayers: 2,
+            selectedActivationFunctionName: 'leakyRelu',
+            numLayers: 8,
             z1Scale: 1,
             z2Scale: 1,
             stream: null,
@@ -136,6 +138,10 @@ export default class NnArt extends Component {
     }
 
     setVideoData() {
+        if (counter > 100) {
+            return;
+        }
+        counter++;
         this.image && this.image.dispose();
         this.image = dl.fromPixels(this.video).reverse(1);
         this.timer = requestAnimationFrame(this.setVideoData);
