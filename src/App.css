@@ -145,8 +145,8 @@ li:hover {
 h1 {
     overflow: hidden;
     font-size: 0;
-    background: transparent url(./img/jamesChou.jpg) no-repeat 55% 40%;
-    background-size: 200px;
+    background: transparent url(./img/jamesChou.png) no-repeat;
+    background-size: cover;
     width: 150px;
     height: 150px;
     border-radius: 50%;
