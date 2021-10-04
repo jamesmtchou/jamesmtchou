@@ -260,8 +260,12 @@ h1 {
     color: #20BEFF;
 }
 
-#accenture-link:hover {
-    color: #29B662;
+#apple-link:hover {
+    color: #555555;
+}
+
+#cruise-link:hover {
+    color: #ff4d37;
 }
 
 #autodesk-link:hover {
@@ -277,7 +281,8 @@ h1 {
 }
 
 #video-link:active,
-#accenture-link:active,
+#apple-link:active,
+#cruise-link:active,
 #autodesk-link:active,
 #microsoft-link:active,
 #kaggle-link:active,
